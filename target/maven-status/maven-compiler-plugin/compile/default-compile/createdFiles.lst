@@ -1,0 +1,10 @@
+com\etteplan\servicemanual\factorydevice\Severity.class
+com\etteplan\servicemanual\factorydevice\FactoryDeviceController.class
+com\etteplan\servicemanual\ServiceManualApplication.class
+com\etteplan\servicemanual\factorydevice\FactoryDevice.class
+com\etteplan\servicemanual\factorydevice\MaintenanceTaskRepository.class
+com\etteplan\servicemanual\factorydevice\FactoryDeviceRepository.class
+com\etteplan\servicemanual\factorydevice\FactoryDeviceNotFoundException.class
+com\etteplan\servicemanual\factorydevice\MaintenanceTask.class
+com\etteplan\servicemanual\factorydevice\Status.class
+com\etteplan\servicemanual\factorydevice\FactoryDeviceNotFoundAdvice.class
