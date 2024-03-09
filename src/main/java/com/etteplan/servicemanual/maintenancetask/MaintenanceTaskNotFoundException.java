@@ -8,14 +8,7 @@ package com.etteplan.servicemanual.maintenancetask;
  *
  * @author asus
  */
-public class MaintenanceTaskNotFound {
-
-    /**
-     * Creates a new instance of <code>MaintenanceTaskNotFound</code> without
-     * detail message.
-     */
-    public MaintenanceTaskNotFound() {
-    }
+public class MaintenanceTaskNotFoundException extends RuntimeException{
 
     /**
      * Constructs an instance of <code>MaintenanceTaskNotFound</code> with the
@@ -23,7 +16,7 @@ public class MaintenanceTaskNotFound {
      *
      * @param msg the detail message.
      */
-    public MaintenanceTaskNotFound(String msg) {
-        super(msg);
+    public MaintenanceTaskNotFoundException(Long id) {
+        super("Could not find maintenance task " + id);
     }
 }

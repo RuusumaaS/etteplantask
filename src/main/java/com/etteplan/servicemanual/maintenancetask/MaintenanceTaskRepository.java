@@ -4,7 +4,9 @@
  */
 package com.etteplan.servicemanual.maintenancetask;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  *
@@ -12,4 +14,30 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MaintenanceTaskRepository extends JpaRepository<MaintenanceTask, Long> {
     
+    /**
+     * Custom query to find all tasks first ordered by severity and then registration.
+     * @return 
+     */
+    public List<MaintenanceTask> findAllByOrderBySeverityDescRegistrationDateDesc();
+    
+    /**
+     * Custom query to find maintenancetasks assigned to specific device.
+     * @param factorydeviceId
+     * @return 
+     */
+    public List<MaintenanceTask> findByFactoryDeviceIdOrderBySeverityDescRegistrationDateDesc(Long factorydeviceId);
+    
+    /**
+     * Custom query that filters with given status.
+     * @param status
+     * @return 
+     */
+    public List<MaintenanceTask> findByStatusOrderBySeverityDescRegistrationDateDesc(Status status);
+    
+    /**
+     * Custom query that filters with given severity.
+     * @param status
+     * @return 
+     */
+    public List<MaintenanceTask> findBySeverityOrderByRegistrationDateDesc(Severity severity);
 }

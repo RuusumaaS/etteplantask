@@ -1,0 +1,11 @@
+FactoryDevice,Description,DateTime,Severity,Status
+1,Change broken screen,2023-12-29T09:11:37,critical,closed
+30,Change battery,2024-01-02T13:01:22,important,closed
+12,Test and replace faulty power adapters,2023-11-11T15:25:11,important,closed
+45,Clean dust and debris from cooling system,2024-03-03T08:17:47,unimportant,open
+2,Fix emergnecy stop system,2024-03-01T11:15:30,critical,open
+7,Check start-buttons led,2024-02-01T14:55:41,unimportant,open
+18,Replace screen protector,2023-12-07T11:02:02,unimportant,closed
+9,Change oils,2024-01-05T13:03:56,important,closed
+16,Change battery,2024-03-05T13:07:22,critical,open
+23,Change ledlight,2024-02-02T12:12:12,unimportant,closed

@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class FactoryDeviceController {
 
     private final FactoryDeviceRepository factoryDeviceRepository;
-    private final MaintenanceTaskRepository maintenanceTaskRepository;
 
-    FactoryDeviceController(FactoryDeviceRepository factoryDeviceRepository,MaintenanceTaskRepository maintenanceTaskRepository) {
+    FactoryDeviceController(FactoryDeviceRepository factoryDeviceRepository) {
         this.factoryDeviceRepository = factoryDeviceRepository;
-        this.maintenanceTaskRepository = maintenanceTaskRepository;
     }
 
     @GetMapping("/factorydevices")
@@ -30,15 +28,5 @@ public class FactoryDeviceController {
     FactoryDevice one(@PathVariable Long id) {
         return factoryDeviceRepository.findById(id)
             .orElseThrow(() -> new FactoryDeviceNotFoundException(id));
-    }
-    
-    @PostMapping("/maintenansetasks")
-    MaintenanceTask newTask(@RequestBody MaintenanceTask task){
-        return maintenanceTaskRepository.save(task);
-    }
-    
-    @DeleteMapping("/maintenancetasks/{id}")
-    void deleteMaintenanceTask(@PathVariable Long id){
-        maintenanceTaskRepository.deleteById(id);
-    }
+    } 
 }

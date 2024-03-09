@@ -6,11 +6,13 @@ package com.etteplan.servicemanual.maintenancetask;
 
 import com.etteplan.servicemanual.factorydevice.FactoryDevice;
 
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 /**
@@ -20,11 +22,17 @@ import javax.persistence.ManyToOne;
 @Entity
 public class MaintenanceTask {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+    
     private String description;
-    private Date registration;
+    
+    private LocalDateTime registrationDate;
+    
+    @Enumerated(EnumType.STRING)
     private Severity severity;
+    
+    @Enumerated(EnumType.STRING)
     private Status status;
     
     @ManyToOne
@@ -33,11 +41,11 @@ public class MaintenanceTask {
     
     protected MaintenanceTask(){}
     
-    public MaintenanceTask(FactoryDevice device, String description, Date date,
+    public MaintenanceTask(FactoryDevice device, String description, LocalDateTime date,
             Severity severity, Status status){
         this.factoryDevice = device;
         this.description = description;
-        this.registration = date;
+        this.registrationDate = date;
         this.severity = severity;
         this.status = status;
     }
@@ -50,20 +58,40 @@ public class MaintenanceTask {
         return this.description;
     }
     
-    public Date getRegistrationDate(){
-        return this.registration;
+    public void setDescription(String description){
+        this.description = description;
+    }
+    
+    public LocalDateTime getRegistrationDate(){
+        return this.registrationDate;
+    }
+    
+    public void setRegistrationDate(LocalDateTime date){
+        this.registrationDate = date;
     }
     
     public Severity getSeverity(){
         return this.severity;
     }
     
+    public void setSeverity(Severity severity){
+        this.severity = severity;
+    }
+    
     public Status getStatus(){
         return this.status;
     }
     
+    public void setStatus(Status status){
+        this.status = status;
+    }
+    
     public FactoryDevice getDevice(){
         return this.factoryDevice;
+    }
+    
+    public void setDevice(FactoryDevice device){
+        this.factoryDevice = device;
     }
     
     
