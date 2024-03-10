@@ -59,7 +59,9 @@ To find proper API request go to http://localhost:8080/swagger-ui/index.html whe
 # Notes for the examiner
 
 Hi! I created a new package, maintenancetask, where the code I create is located. I did very little changes to factorydevice. Most notably I changed the FactoryDeviceNotFoundException to public so I can use it in the new package.
+
 Currently, maintenancetasks registrationtime doesn't change whe tasks are modified. I have implemented comment lines that would change the registration times. Also, since I assumed that the code should give tasks their registration times, you don't need to add registartion times to the requestbody when using post-request.
+
 The application will fill the database when you start it. It will use the seeddata.csv you provided to fill the factorydevices. I also made a small csv for maintenance tasks. Data of those files will only be saved in the database if the tables empty. If you don't want to use that data, you may either wipe the code from ServiceAppilacation's CommandLineRunner or comment it before first use.. 
 If you have any questions, contact me by email or phone. 
 
