@@ -5,8 +5,8 @@
 package com.etteplan.servicemanual.maintenancetask;
 
 /**
- *
- * @author asus
+ * Exception taht is thrown when Status is given a wrong kind of string, not open or closed.
+ * @author RuusumaaS
  */
 public class IllegalStatusException extends RuntimeException{
 

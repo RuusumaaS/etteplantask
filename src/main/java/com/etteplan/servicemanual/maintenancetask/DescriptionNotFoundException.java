@@ -5,8 +5,8 @@
 package com.etteplan.servicemanual.maintenancetask;
 
 /**
- *
- * @author asus
+ * If post-request doesn't have description, this gets thrown.
+ * @author RuusumaaS
  */
 public class DescriptionNotFoundException  extends RuntimeException{
 

@@ -5,8 +5,8 @@
 package com.etteplan.servicemanual.maintenancetask;
 
 /**
- *
- * @author asus
+ * If given id can't be found from MaintenanceTaskRepository, this gets thrown.
+ * @author RuusumaaS
  */
 public class MaintenanceTaskNotFoundException extends RuntimeException{
 

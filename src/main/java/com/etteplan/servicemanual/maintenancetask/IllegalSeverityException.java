@@ -5,8 +5,8 @@
 package com.etteplan.servicemanual.maintenancetask;
 
 /**
- *
- * @author asus
+ * Exception that gets thrown, when wrong kind of string is given to Severity.
+ * @author RuusumaaS
  */
 public class IllegalSeverityException extends RuntimeException{
 

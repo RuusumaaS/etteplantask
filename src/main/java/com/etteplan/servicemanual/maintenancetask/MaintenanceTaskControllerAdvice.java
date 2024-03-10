@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Advice for exceptions defined in this package.
+ * @author RuusumaaS
+ */
 @ControllerAdvice
 public class MaintenanceTaskControllerAdvice {
     

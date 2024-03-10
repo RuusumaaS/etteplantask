@@ -25,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
- * @author asus
+ * Controller to recieve the http-requests and define the api paths. 
+ * Controller handles the requests depending on the endpoint, calls function to do the right
+ * actions. Only modifies Maintenance tasks but needs access to facotry devices.
+ * I have defined here the default values for severity and status.
+ * @author RuusumaaS 
  */
 @RestController
 @Api(tags = "MaintenanceTaskController", description = "Adding, querying, deleting and modifying maintenance tasks.")
@@ -56,12 +59,13 @@ public class MaintenanceTaskController {
     }
 
     /**
-     * Find one MaintenanceTask with given id.
+     * Finds one MaintenanceTask with given id or throws error if given id
+     * doesn't exist.
      * @param id
      * @return MaintenanceTask
      * @throws MaintenanceTaksNotFoundException
      */
-    @ApiOperation(value = "Get one maintenance tasks by given id", notes ="Get on task")
+    @ApiOperation(value = "Get one maintenance tasks by given id")
     @GetMapping("/maintenancetasks/{id}")
     MaintenanceTask oneMaintenanceTask(@PathVariable Long id) {
         return maintenanceTaskRepository.findById(id)
@@ -69,7 +73,7 @@ public class MaintenanceTaskController {
     }
     
     /**
-     * Finds all maintenancetasks filtered by factorydevice.
+     * Finds all maintenancetasks filtered by factorydevice if device exists.
      * @param factoryDeviceId
      * @return 
      */
@@ -83,7 +87,8 @@ public class MaintenanceTaskController {
     }
     
     /**
-     * Find all maintenancetasks filtered with status. So either all open tasks or closed ones.
+     * Find all maintenancetasks filtered with status. So either all open tasks or closed ones. 
+     * If given inappropriate status, Status enmu automatically throws an error.
      * @param status
      * @return 
      */
@@ -95,7 +100,8 @@ public class MaintenanceTaskController {
     }
     
     /**
-     * Find all maintenancetasks filtered with severity.
+     * Find all maintenancetasks filtered with severity. If given inappropriate severity, 
+     * Severity enum automatically throws an error.
      * @param severity
      * @return 
      */
@@ -109,7 +115,8 @@ public class MaintenanceTaskController {
      * Function that creates a new MaintnenaceTask. Doesn't require all field in RequestBody.
      * In order to save new task. RequestBody must contain description and path must contain
      * exsiting id for FactoryDevices. If severity and status are not given, task will
-     * be given default values of status and severity.
+     * be given default values defined earlier. Severity and status enum sends exceptions
+     * if they get wrong kind of string. This functions gives hte new task registration time.
      * @param task
      * @param factoryDeviceId
      * @return 
@@ -135,7 +142,8 @@ public class MaintenanceTaskController {
             throw new FactoryDeviceNotFoundException(factoryDeviceId);
         }
         FactoryDevice device = factoryDeviceRepository.getById(factoryDeviceId);
-        
+        task.setDevice(device);
+                
         if(task.getDescription() == null){
             throw new DescriptionNotFoundException();   //Description can't be null like severity and status can.
         }
@@ -148,8 +156,6 @@ public class MaintenanceTaskController {
             task.setStatus(DEFAULT_STATUS);
         }
         
-        task.setDevice(device);
-        
         task.setRegistrationDate(LocalDateTime.now());
         
         return maintenanceTaskRepository.save(task);
@@ -159,6 +165,7 @@ public class MaintenanceTaskController {
      * Put-request to modify tasks. Has two paths, one with factorydeviceid if user wants
      * to change task's factorydevice and one without factorydeviceid. This only changes
      * the fields that were given in requestbody by checking if given field is null or not.
+     * This can be called without requestbody or facorydeviceid.
      * @param task
      * @param id
      * @param factoryDeviceId
@@ -176,28 +183,31 @@ public class MaintenanceTaskController {
                             + "You can leave some of these out.")
     })
     @PutMapping({"/maintenancetasks/{id}/{factoryDeviceId}","/maintenancetasks/{id}"})
-    MaintenanceTask modifyMaintenanceTaskDevice(@ApiParam(value = "Give the info you want to change.")@RequestBody MaintenanceTask task,
+    MaintenanceTask modifyMaintenanceTaskDevice(@ApiParam(value = "Give the info you want to change.")@RequestBody(required = false) MaintenanceTask task,
             @PathVariable Long id, @PathVariable(required = false) Long factoryDeviceId){
         
         return maintenanceTaskRepository.findById(id).      //Find task or throw error.
                 map(maintenancetask -> {
                     
-                    if(factoryDeviceId != null){  //Trying to find existing FactoryDevice. If not found, error.
+                    if(factoryDeviceId != null){  //Trying to find existing FactoryDevice. If not found-> error.
                         FactoryDevice factoryDevice = factoryDeviceRepository.findById(factoryDeviceId)
                             .orElseThrow(() -> new FactoryDeviceNotFoundException(factoryDeviceId));
                         maintenancetask.setDevice(factoryDevice);
                     }
                     
+                    if(task != null){  //Check if body is null and then apply non null fields.
+                        
+                        if(task.getDescription() != null){
+                            maintenancetask.setDescription(task.getDescription());
+                        }
+                        if(task.getSeverity() != null){
+                            maintenancetask.setSeverity(task.getSeverity());
+                        }
+                        if(task.getStatus() != null){
+                            maintenancetask.setStatus(task.getStatus());
+                        }
+                    }
                     
-                    if(task.getDescription() != null){
-                        maintenancetask.setDescription(task.getDescription());
-                    }
-                    if(task.getSeverity() != null){
-                        maintenancetask.setSeverity(task.getSeverity());
-                    }
-                    if(task.getStatus() != null){
-                        maintenancetask.setStatus(task.getStatus());
-                    }
                     
                     //If you want to update the registration date to match update moment, uncomment the line below.
                     //maintenancetask.setRegistrationDate(LocalDateTime.now());
@@ -208,7 +218,7 @@ public class MaintenanceTaskController {
     
     
     /**
-     * Delete MaintenanceTask if given correct id.
+     * Delete MaintenanceTask if given correct id if id exists.
      * @param id 
      */
     @ApiOperation(value = "Delete mainetnance task with given id.")
@@ -217,7 +227,8 @@ public class MaintenanceTaskController {
         if(!maintenanceTaskRepository.existsById(id)){
             throw new MaintenanceTaskNotFoundException(id);
         }
-        MaintenanceTask task = maintenanceTaskRepository.getById(id);
+        
+        MaintenanceTask task = maintenanceTaskRepository.getById(id); //This is just for return to show what was deleted.
         maintenanceTaskRepository.deleteById(id);
         return task;
     }
