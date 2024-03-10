@@ -18,6 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+
+/**
+ * Test class for MaintenanceTaskController. All tests are meant for exceptions.
+ * @author RuusumaaS
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,6 +42,12 @@ public class MaintenanceTaskControllerTest {
     public void getMaintenanceTaskNotFound() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/maintenancetasks/-1").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void getByFactoryDevice() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/maintenancetasks/factorydevice/1").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
     }
     
     @Test
