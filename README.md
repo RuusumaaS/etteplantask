@@ -64,7 +64,7 @@ Currently, maintenancetasks registrationtime doesn't change whe tasks are modifi
 
 The application will fill the database when you start it. It will use the seeddata.csv you provided to fill the factorydevices. I also made a small csv for maintenance tasks. Data of those files will only be saved in the database if the tables empty. If you don't want to use that data, you may either wipe the code from ServiceAppilacation's CommandLineRunner or comment it before first use.
 
-About testing, I did some unit-tests but mostly I did manual testing. In University testing is not common. Also, Spring boot was completely new to me, so I didin't know exactly how to test everything. For example, orderby's I had to test manually.
+About testing, I did some unit-tests but mostly I did manual testing. In University testing is not common. Also, Spring boot was completely new to me, so I didin't know exactly how to test everything. For example, orderby's I had to test manually. In order for the unit-tests to work, there needs to be one factorydevice with id 1 in the factory_device table. Therefore if you don't want to have all seeddata in the repo, you still need at least one device.
 
 If you have any questions, contact me by email or phone. 
 
