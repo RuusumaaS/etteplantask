@@ -26,7 +26,7 @@ public class SwaggerConfiguration {
                 .apis(RequestHandlerSelectors.basePackage("com.etteplan.servicemanual.maintenancetask"))
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfoMaintenanceTask());
     }
     
     @Bean
@@ -37,13 +37,23 @@ public class SwaggerConfiguration {
                 .apis(RequestHandlerSelectors.basePackage("com.etteplan.servicemanual.factorydevice"))
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfoFactoryDevice());
     }
 
-    private ApiInfo apiInfo() {
+    private ApiInfo apiInfoFactoryDevice() {
         return new ApiInfoBuilder()
                 .title("Etteplan maintenancetask work")
                 .description("API documentation for your Spring Boot application")
+                .version("1.0")
+                .build();
+    }
+    
+    private ApiInfo apiInfoMaintenanceTask() {
+        return new ApiInfoBuilder()
+                .title("Etteplan maintenancetask work")
+                .description("Documentation for maintenance tasks. Always use JSON as request bodies. You never give factorydevice"
+                        + "in request body. If that is needed, it is given in path. Regoistrationtimes are also handled in code. Severity and status"
+                        + "are optional for you to write as they have default values specified in code.")
                 .version("1.0")
                 .build();
     }

@@ -8,10 +8,14 @@ import com.etteplan.servicemanual.factorydevice.FactoryDevice;
 import com.etteplan.servicemanual.factorydevice.FactoryDeviceRepository;
 import com.etteplan.servicemanual.factorydevice.FactoryDeviceNotFoundException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author asus
  */
 @RestController
-@Api(tags = "MaintenanceTaskController", description = "Adding, querying, deleting and modyfying maintenance tasks.")
+@Api(tags = "MaintenanceTaskController", description = "Adding, querying, deleting and modifying maintenance tasks.")
 public class MaintenanceTaskController {
     
     private final MaintenanceTaskRepository maintenanceTaskRepository;
@@ -91,7 +95,7 @@ public class MaintenanceTaskController {
      * @param severity
      * @return 
      */
-    @ApiOperation(value = "Get all maintenance tasks", notes ="")
+    @ApiOperation(value = "Get all maintenance tasks filtered with given severity.", notes ="")
     @GetMapping("maintenancetasks/severity/{severity}")
     List<MaintenanceTask> findTasksBySeverity(@PathVariable String severity){
         return maintenanceTaskRepository.findBySeverityOrderByRegistrationDateDesc(Severity.valueOf(severity.toUpperCase()));
@@ -106,8 +110,22 @@ public class MaintenanceTaskController {
      * @param factoryDeviceId
      * @return 
      */
+    @ApiOperation(value = "Create a new task",
+            notes = "This endpoint creates a new task with the given information.",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.TEXT_PLAIN_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "body", value = "JSON request body. Only requires description in body. "
+                    + "Status and severity can use default values: UNIMPORTANT and CLOSED, if not specified. Do not give factorydevice or reqistartion in body.",
+                    dataType = "string", paramType = "body",
+                    example = "{\"description\": \"Sample description\", \"status\": \"open\", \"severity\": \"critical\"}\n"
+                            + "You meay leave status and/or severity out of body.")
+    })
     @PostMapping("/maintenancetasks/{factoryDeviceId}")
-    MaintenanceTask newMaintenanceTask(@RequestBody MaintenanceTask task,@PathVariable Long factoryDeviceId){
+    MaintenanceTask newMaintenanceTask(
+            @ApiParam(value = "Given information of the new task. Requires at least description.")
+            @RequestBody MaintenanceTask task
+            ,@PathVariable Long factoryDeviceId){
         
         
         if(task.getDescription() == null){
@@ -141,8 +159,19 @@ public class MaintenanceTaskController {
      * @param factoryDeviceId
      * @return 
      */
+    @ApiOperation(value = "Modify existing task.",
+            notes = "Modifies an existing task if given a right id.",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.TEXT_PLAIN_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "body", value = "JSON request body. Give only those values you want to change. Registration time can't be changed. "
+                    + "Give factorydeviceId in path.",
+                    dataType = "string", paramType = "body",
+                    example = "{\"description\": \"Sample description\", \"status\": \"open\", \"severity\": \"critical\"}\n"
+                            + "You can leave some of these out.")
+    })
     @PutMapping({"/maintenancetasks/{id}/{factoryDeviceId}","/maintenancetasks/{id}"})
-    MaintenanceTask modifyMaintenanceTaskDevice(@RequestBody MaintenanceTask task,
+    MaintenanceTask modifyMaintenanceTaskDevice(@ApiParam(value = "Give the info you want to change.")@RequestBody MaintenanceTask task,
             @PathVariable Long id, @PathVariable(required = false) Long factoryDeviceId){
         
         return maintenanceTaskRepository.findById(id).      //Find task or throw error.
@@ -177,6 +206,7 @@ public class MaintenanceTaskController {
      * Delete MaintenanceTask if given correct id.
      * @param id 
      */
+    @ApiOperation(value = "Delete mainetnance task with given id.")
     @DeleteMapping("/maintenancetasks/{id}")
     void deleteMaintenanceTask(@PathVariable Long id){
         if(!maintenanceTaskRepository.existsById(id)){

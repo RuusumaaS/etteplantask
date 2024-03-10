@@ -8,6 +8,8 @@ In order to use this application you need to build the project with Maven. You w
 These instructions work at least on Windows. I have never done this on MacOS or Linux.
 Before building you also need to download PostgreSQL and set up the project.
 
+If you already have installed JDK, Maven, PostgreSQL and JBDC, you can skip the download parts.
+
 **Download JDK and Maven.**
 
 1. For Java JDK downloads visit website https://www.oracle.com/java/technologies/downloads/#jdk21-windows.
@@ -40,9 +42,9 @@ If you have donwloaded the necessary components, you may now follow these steps 
 
 1. Open application.properties from servicemanual-java\src\main\resources folder.
 2. Change/add the info for the these lines:
-    spring.datasource.url=jdbc:postgresql://localhost:<PORT_PSQL_LISTENS_CURRENTLY_5432>/<YOUR_DATABASE_NAME>
-    spring.datasource.username=<YOUR_DATABASE_OWNER>
-    spring.datasource.password=<DATABASE_OWNER'S_PASSWORD>
+    - spring.datasource.url=jdbc:postgresql://localhost:<PORT_PSQL_LISTENS_DEFAULT_5432>/<YOUR_DATABASE_NAME>
+    - spring.datasource.username=<YOUR_DATABASE_OWNER>
+    - spring.datasource.password=<DATABASE_OWNER'S_PASSWORD>
 3. When you have given correct information, you will be able to build the project in terminal.
 4. Move to project directory (directory that contains pom.xml -file of the project).
 4. Run command "mvn clean package" to build package.
@@ -56,8 +58,8 @@ To find proper API request go to http://localhost:8080/swagger-ui/index.html whe
 
 # Notes for the examiner
 
-Hi! I ceated a new package, maintenancetask where the code I create is located. I did very little changes to factorydevisec. Most notably I changed the FactoryDeviceNotFoundException to public so I can use it in the new package.
+Hi! I created a new package, maintenancetask, where the code I create is located. I did very little changes to factorydevice. Most notably I changed the FactoryDeviceNotFoundException to public so I can use it in the new package.
 Currently, maintenancetasks registrationtime doesn't change whe tasks are modified. I have implemented comment lines that would change the registration times. Also, since I assumed that the code should give tasks their registration times, you don't need to add registartion times to the requestbody when using post-request.
-
-
+The application will fill the database when you start it. It will use the seeddata.csv you provided to fill the factorydevices. I also made a small csv for maintenance tasks. Data of those files will only be saved in the database if the tables empty. If you don't want to use that data, you may either wipe the code from ServiceAppilacation's CommandLineRunner or comment it before first use.. 
+If you have any questions, contact me by email or phone. 
 
