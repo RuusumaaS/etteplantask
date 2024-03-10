@@ -18,21 +18,21 @@ public interface MaintenanceTaskRepository extends JpaRepository<MaintenanceTask
      * Custom query to find all tasks first ordered by severity and then registration.
      * @return 
      */
-    public List<MaintenanceTask> findAllByOrderBySeverityDescRegistrationDateDesc();
+    public List<MaintenanceTask> findAllByOrderBySeverityAscRegistrationDateDesc();
     
     /**
      * Custom query to find maintenancetasks assigned to specific device.
      * @param factorydeviceId
      * @return 
      */
-    public List<MaintenanceTask> findByFactoryDeviceIdOrderBySeverityDescRegistrationDateDesc(Long factorydeviceId);
+    public List<MaintenanceTask> findByFactoryDeviceIdOrderBySeverityAscRegistrationDateDesc(Long factorydeviceId);
     
     /**
      * Custom query that filters with given status.
      * @param status
      * @return 
      */
-    public List<MaintenanceTask> findByStatusOrderBySeverityDescRegistrationDateDesc(Status status);
+    public List<MaintenanceTask> findByStatusOrderBySeverityAscRegistrationDateDesc(Status status);
     
     /**
      * Custom query that filters with given severity.

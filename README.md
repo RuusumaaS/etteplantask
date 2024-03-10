@@ -1,12 +1,12 @@
 # Servicemanual - Etteplan backend coding task
 
-This readme-file will contain instruction on how to strat this API and also some sidenotes at the end for the examiner.
+This readme-file will contain instruction on how to start this API and also some sidenotes at the end for the examiner.
 
-# Download necessary components: Java, Maven and PostgreSQL.
+## Download necessary components: Java, Maven and PostgreSQL.
 
 In order to use this application you need to build the project with Maven. You will also need JDK.
 These instructions work at least on Windows. I have never done this on MacOS or Linux.
-Before building you also need to download PostgreSQL and set up the project.
+Before building you also need to download PostgreSQL, PostgreSQL's java driver JBDC and set up the project.
 
 If you already have installed JDK, Maven, PostgreSQL and JBDC, you can skip the download parts.
 
@@ -51,17 +51,20 @@ If you have donwloaded the necessary components, you may now follow these steps 
 5. Now move to /target -directory and run the .jar-file. The jar-file should be called service-manua-0.1.0.jar. Run the file with command "java -jar service-manual-0.1.0.jar".
 6. Now the project should be listening port 8080 and you should be able to send requests to it. I recommend using POSTMAN.
 
-# How to use API
+## How to use API
 
-To find proper API request go to http://localhost:8080/swagger-ui/index.html when application is running. There is Swagger-documentation for the API.
+To find documentation for API request go to http://localhost:8080/swagger-ui/index.html when application is running. There is Swagger-documentation for the API.
 
 
-# Notes for the examiner
+## Notes for the examiner
 
 Hi! I created a new package, maintenancetask, where the code I create is located. I did very little changes to factorydevice. Most notably I changed the FactoryDeviceNotFoundException to public so I can use it in the new package.
 
 Currently, maintenancetasks registrationtime doesn't change whe tasks are modified. I have implemented comment lines that would change the registration times. Also, since I assumed that the code should give tasks their registration times, you don't need to add registartion times to the requestbody when using post-request.
 
-The application will fill the database when you start it. It will use the seeddata.csv you provided to fill the factorydevices. I also made a small csv for maintenance tasks. Data of those files will only be saved in the database if the tables empty. If you don't want to use that data, you may either wipe the code from ServiceAppilacation's CommandLineRunner or comment it before first use.. 
+The application will fill the database when you start it. It will use the seeddata.csv you provided to fill the factorydevices. I also made a small csv for maintenance tasks. Data of those files will only be saved in the database if the tables empty. If you don't want to use that data, you may either wipe the code from ServiceAppilacation's CommandLineRunner or comment it before first use.
+
+About testing, I did some unit-tests but mostly I did manual testing. In University testing is not common. Also, Spring boot was completely new to me, so I didin't know exactly how to test everything. For example, orderby's I had to test manually.
+
 If you have any questions, contact me by email or phone. 
 

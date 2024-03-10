@@ -52,7 +52,7 @@ public class MaintenanceTaskController {
     @ApiOperation(value = "Get all maintenance tasks", notes = "List of tasks which is first orderd by severity and then registartiom date")
     @GetMapping("/maintenancetasks")
     List<MaintenanceTask> allMaintenanceTasks() {
-        return maintenanceTaskRepository.findAllByOrderBySeverityDescRegistrationDateDesc();
+        return maintenanceTaskRepository.findAllByOrderBySeverityAscRegistrationDateDesc();
     }
 
     /**
@@ -76,7 +76,10 @@ public class MaintenanceTaskController {
     @ApiOperation(value = "Get all maintenance tasks and filter it with factorydevice's id.")
     @GetMapping("/maintenancetasks/factorydevice/{factoryDeviceId}")
     List<MaintenanceTask> tasksFilteredByDevices(@PathVariable Long factoryDeviceId){
-        return maintenanceTaskRepository.findByFactoryDeviceIdOrderBySeverityDescRegistrationDateDesc(factoryDeviceId);
+        if(!factoryDeviceRepository.existsById(factoryDeviceId)){
+            throw new FactoryDeviceNotFoundException(factoryDeviceId);
+        }
+        return maintenanceTaskRepository.findByFactoryDeviceIdOrderBySeverityAscRegistrationDateDesc(factoryDeviceId);
     }
     
     /**
@@ -84,10 +87,11 @@ public class MaintenanceTaskController {
      * @param status
      * @return 
      */
-    @ApiOperation(value = "Get all maintenance tasks filtered with status", notes ="Good way to aget either all open tasks or closed ones.")
+    @ApiOperation(value = "Get all maintenance tasks filtered with status", notes ="Good way to get either all open tasks or closed ones.")
     @GetMapping("maintenancetasks/status/{status}")
     List<MaintenanceTask> findTasksByStatus(@PathVariable String status){
-        return maintenanceTaskRepository.findByStatusOrderBySeverityDescRegistrationDateDesc(Status.valueOf(status.toUpperCase()));
+        //fromValue is defined in Status.java. Way to create a status from a string. Thwors IllegalStatusException.
+        return maintenanceTaskRepository.findByStatusOrderBySeverityAscRegistrationDateDesc(Status.fromValue(status));
     }
     
     /**
@@ -98,7 +102,7 @@ public class MaintenanceTaskController {
     @ApiOperation(value = "Get all maintenance tasks filtered with given severity.", notes ="")
     @GetMapping("maintenancetasks/severity/{severity}")
     List<MaintenanceTask> findTasksBySeverity(@PathVariable String severity){
-        return maintenanceTaskRepository.findBySeverityOrderByRegistrationDateDesc(Severity.valueOf(severity.toUpperCase()));
+        return maintenanceTaskRepository.findBySeverityOrderByRegistrationDateDesc(Severity.fromValue(severity));
     }
 
     /**
@@ -127,6 +131,10 @@ public class MaintenanceTaskController {
             @RequestBody MaintenanceTask task
             ,@PathVariable Long factoryDeviceId){
         
+        if(!factoryDeviceRepository.existsById(factoryDeviceId)){
+            throw new FactoryDeviceNotFoundException(factoryDeviceId);
+        }
+        FactoryDevice device = factoryDeviceRepository.getById(factoryDeviceId);
         
         if(task.getDescription() == null){
             throw new DescriptionNotFoundException();   //Description can't be null like severity and status can.
@@ -139,9 +147,6 @@ public class MaintenanceTaskController {
         if(task.getStatus() == null){
             task.setStatus(DEFAULT_STATUS);
         }
-        
-        FactoryDevice device = factoryDeviceRepository.findById(factoryDeviceId)
-                .orElseThrow(() -> new FactoryDeviceNotFoundException(task.getDevice().getId()));
         
         task.setDevice(device);
         
@@ -179,7 +184,7 @@ public class MaintenanceTaskController {
                     
                     if(factoryDeviceId != null){  //Trying to find existing FactoryDevice. If not found, error.
                         FactoryDevice factoryDevice = factoryDeviceRepository.findById(factoryDeviceId)
-                            .orElseThrow(() -> new FactoryDeviceNotFoundException(task.getDevice().getId()));
+                            .orElseThrow(() -> new FactoryDeviceNotFoundException(factoryDeviceId));
                         maintenancetask.setDevice(factoryDevice);
                     }
                     
@@ -197,7 +202,7 @@ public class MaintenanceTaskController {
                     //If you want to update the registration date to match update moment, uncomment the line below.
                     //maintenancetask.setRegistrationDate(LocalDateTime.now());
                     
-                    return maintenancetask;
+                    return maintenanceTaskRepository.save(maintenancetask);
                 }).orElseThrow(()-> new MaintenanceTaskNotFoundException(id));
     }
     
@@ -208,12 +213,13 @@ public class MaintenanceTaskController {
      */
     @ApiOperation(value = "Delete mainetnance task with given id.")
     @DeleteMapping("/maintenancetasks/{id}")
-    void deleteMaintenanceTask(@PathVariable Long id){
+    MaintenanceTask deleteMaintenanceTask(@PathVariable Long id){
         if(!maintenanceTaskRepository.existsById(id)){
             throw new MaintenanceTaskNotFoundException(id);
         }
+        MaintenanceTask task = maintenanceTaskRepository.getById(id);
         maintenanceTaskRepository.deleteById(id);
+        return task;
     }
-    
-    
+
 }

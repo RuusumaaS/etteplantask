@@ -53,7 +53,7 @@ public class SwaggerConfiguration {
                 .title("Etteplan maintenancetask work")
                 .description("Documentation for maintenance tasks. Always use JSON as request bodies. You never give factorydevice"
                         + "in request body. If that is needed, it is given in path. Regoistrationtimes are also handled in code. Severity and status"
-                        + "are optional for you to write as they have default values specified in code.")
+                        + "are optional for you to write as they have default values specified in code. Every query returns the maintenancetasks.")
                 .version("1.0")
                 .build();
     }
