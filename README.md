@@ -1,6 +1,8 @@
 # Servicemanual - Etteplan backend coding task
 
-This readme-file will contain instruction on how to start this API and also some sidenotes at the end for the examiner.
+This readme-file will contain instruction on how to start this API. 
+
+In this project I have made the whole maintenancetask package but factorydevice-package was given. I made there some little most of the code in that package was given.
 
 ## Download necessary components: Java, Maven and PostgreSQL.
 
@@ -56,15 +58,4 @@ If you have donwloaded the necessary components, you may now follow these steps 
 To find documentation for API request go to http://localhost:8080/swagger-ui/index.html when application is running. There is Swagger-documentation for the API.
 
 
-## Notes for the examiner
-
-Hi! I created a new package, maintenancetask, where the code I create is located. I did very little changes to factorydevice. Most notably I changed the FactoryDeviceNotFoundException to public so I can use it in the new package.
-
-Currently, maintenancetasks registrationtime doesn't change whe tasks are modified. I have implemented comment lines that would change the registration times. Also, since I assumed that the code should give tasks their registration times, you don't need to add registartion times to the requestbody when using post-request.
-
-The application will fill the database when you start it. It will use the seeddata.csv you provided to fill the factorydevices. I also made a small csv for maintenance tasks. Data of those files will only be saved in the database if the tables empty. If you don't want to use that data, you may either wipe the code from ServiceAppilacation's CommandLineRunner or comment it before first use.
-
-About testing, I did some unit-tests but mostly I did manual testing. In University testing is not common. Also, Spring boot was completely new to me, so I didin't know exactly how to test everything. For example, orderby's I had to test manually. In order for the unit-tests to work, there needs to be one factorydevice with id 1 in the factory_device table. Therefore if you don't want to have all seeddata in the repo, you still need at least one device.
-
-If you have any questions, contact me by email or phone. 
 
